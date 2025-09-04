@@ -1,0 +1,31 @@
+from zapv2 import ZAPv2
+
+# Set up the ZAP API client
+api_key = "your_zap_api_key"  # Set this to your ZAP API key
+target_url = "http://example.com"  # Replace with your target URL
+
+zap = ZAPv2(apikey=api_key)
+
+# Start spidering the target site
+print(f"Spidering target {target_url}...")
+zap.spider.scan(target_url)
+
+# Wait for spidering to finish
+while int(zap.spider.status) < 100:
+    print(f"Spidering progress: {zap.spider.status}%")
+    time.sleep(5)
+
+# Start active scan for XSS and SQL injection vulnerabilities
+print(f"Scanning target {target_url} for vulnerabilities...")
+zap.ascan.scan(target_url)
+
+# Wait for active scan to finish
+while int(zap.ascan.status) < 100:
+    print(f"Scan progress: {zap.ascan.status}%")
+    time.sleep(5)
+
+# Print out the results
+print("Scan complete. Vulnerabilities detected:")
+alerts = zap.core.alerts(baseurl=target_url, start=0, count=10)
+for alert in alerts:
+    print(f"Alert: {alert['alert']} | Risk: {alert['risk']}")
