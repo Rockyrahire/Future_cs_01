@@ -1,0 +1,38 @@
+from datetime import datetime
+
+def generate_report(vulnerabilities):
+    # Create a basic security report template
+    report = f"Security Testing Report - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+    report += "=" * 50 + "\n"
+    report += "Identified Vulnerabilities:\n"
+    
+    for vulnerability in vulnerabilities:
+        report += f"Vulnerability: {vulnerability['vuln']} | Risk Level: {vulnerability['risk']}\n"
+        report += f"Description: {vulnerability['desc']}\n"
+        report += f"Remediation: {vulnerability['remediation']}\n"
+        report += "-" * 50 + "\n"
+    
+    return report
+
+# Example vulnerabilities
+vulnerabilities = [
+    {
+        "vuln": "SQL Injection",
+        "risk": "High",
+        "desc": "The application is vulnerable to SQL Injection.",
+        "remediation": "Sanitize user input and use prepared statements."
+    },
+    {
+        "vuln": "XSS",
+        "risk": "Medium",
+        "desc": "The application is vulnerable to Cross-Site Scripting (XSS).",
+        "remediation": "Validate and sanitize all user inputs, especially on form fields."
+    }
+]
+
+# Generate and save the report
+report = generate_report(vulnerabilities)
+with open("security_report.txt", "w") as file:
+    file.write(report)
+
+print("Security report generated.")
